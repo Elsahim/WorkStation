@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+  mongo_worksation:
+    image: mongo
+    container_name: mongo_worksation
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - 27017:27017
+
+  minio_worksation:
+    image: minio/minio:latest
+    container_name: minio_worksation
+    restart: always
+    command: server /data
+    environment:
+      - MINIO_ACCESS_KEY=${S3_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${S3_SECRET_KEY}
+      - MINIO_REGION=${S3_REGION}
+    volumes:
+      - ./storage/s3:/data
+    ports:
+      - 9000:9000
